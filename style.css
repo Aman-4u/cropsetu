@@ -4527,3 +4527,25 @@ footer {
         cursor: pointer;
     }
 }
+@media (max-width: 700px) {
+    .header-left p {
+        display: none;
+    }
+}
+@media (max-width: 700px) {
+
+    .header-left {
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .header-left h1 {
+        font-size: 17px;
+        white-space: nowrap;
+    }
+
+    .header-right {
+        flex-shrink: 0;
+    }
+}
