@@ -3604,3 +3604,19 @@ if (logoutButton) {
 
     });
 }
+
+
+/* =========================================================
+   MOBILE SIDEBAR TOGGLE
+   ========================================================= */
+
+const mobileMenuButton = document.getElementById("mobileMenuButton");
+const sidebar = document.querySelector(".sidebar");
+
+if (mobileMenuButton && sidebar) {
+
+    mobileMenuButton.addEventListener("click", function () {
+        sidebar.classList.toggle("mobile-sidebar-open");
+    });
+
+}
