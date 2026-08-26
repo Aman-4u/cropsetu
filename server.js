@@ -36,6 +36,8 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(3456, '127.0.0.1', () => {
-  console.log('CropSetu server running at http://127.0.0.1:3456');
+const PORT = process.env.PORT || 3456;
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`CropSetu server running on port ${PORT}`);
 });
