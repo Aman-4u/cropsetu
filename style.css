@@ -4503,3 +4503,27 @@ footer {
         margin-left: 0;
     }
 }
+
+.mobile-menu-button {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    .mobile-menu-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        border: none;
+        border-radius: 7px;
+
+        background: #edf6f0;
+        color: #247a45;
+
+        font-size: 20px;
+        cursor: pointer;
+    }
+}
