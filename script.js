@@ -96,8 +96,8 @@ function showConfirm(options, onConfirm) {
     }
 
     const icon = options.icon || "❓";
-    const message = options.message || "Pakka?";
-    const okText = options.okText || "Haan";
+    const message = options.message || "are you sure?";
+    const okText = options.okText || "confirm";
     const cancelText = options.cancelText || "Cancel";
     const dangerClass = options.danger ? " confirm-danger" : "";
 
@@ -475,8 +475,8 @@ function deleteListedCrop(index) {
     showConfirm({
 
         icon: "🌾",
-        message: "Is listed crop ko delete karna hai?",
-        okText: "Haan, delete karo",
+        message: "are you sure you want to delete this listed crop?",
+        okText: "Delete",
         danger: true
 
     }, function () {
@@ -1046,8 +1046,8 @@ function deleteLand(index) {
     showConfirm({
 
         icon: "🗑️",
-        message: "\"" + land.name + "\" land delete karni hai?",
-        okText: "Haan, delete karo",
+        message: "\"" + land.name + "\" Are you sure you want to delete this land?",
+        okText: "yes, delete it",
         danger: true
 
     }, function () {
@@ -2300,8 +2300,8 @@ function showLoggedInProfile(profile) {
             showConfirm({
 
                 icon: "🚪",
-                message: "Logout karna hai?",
-                okText: "Haan, logout karo",
+                message: "Are you sure you want to logout?",
+                okText: "logout",
                 danger: true
 
             }, function () {
@@ -2603,7 +2603,7 @@ clearNotificationsButton.addEventListener("click", function() {
 
         icon: "🔔",
         message: "Saari notifications clear karni hain?",
-        okText: "Haan, clear karo",
+        okText: "clear notifications",
         danger: true
 
     }, function () {
@@ -3285,8 +3285,8 @@ clearHistoryButton.addEventListener("click", function () {
     showConfirm({
 
         icon: "📜",
-        message: deliveredCount + " delivered order history se hata dein?",
-        okText: "Haan, clear karo",
+        message: "Remove " + deliveredCount + " delivered order from history?",
+        okText: "clear history",
         danger: true
 
     }, function () {
@@ -3303,7 +3303,7 @@ clearHistoryButton.addEventListener("click", function () {
 
         renderOrders();
 
-        alert("🗑️ Order history clear ho gayi");
+        alert("🗑️ clear order history");
 
     });
 
@@ -3375,7 +3375,7 @@ placeOrderButton.addEventListener("click", function() {
 
     if (cart.length === 0) {
 
-        alert("Pehle cart mein item add karo.");
+        alert("Add any item in your cart.");
 
         return;
     }
@@ -3583,8 +3583,8 @@ if (logoutButton) {
         showConfirm({
 
             icon: "🚪",
-            message: "Logout karna hai?",
-            okText: "Haan, logout karo",
+            message: "Are you sure you want to logout?",
+            okText: "Yes, logout",
             danger: true
 
         }, function () {
