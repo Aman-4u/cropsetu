@@ -1952,12 +1952,14 @@ function showCreateProfile(existing) {
         isEditing ? existing.name : (account ? account.name : "");
 
     document.getElementById("farmerPhone").value =
-    isEditing
-        ? existing.phone
-        : (account ? account.phone : "");
+        isEditing ? existing.phone : "";
 
     document.getElementById("farmerVillage").value =
         isEditing ? existing.village : "";
+
+    document.getElementById("farmerCrops").value =
+        isEditing ? existing.crops : "";
+
 
     saveProfileButton.textContent =
         isEditing ? "💾 Save Changes" : "💾 Create Profile";
