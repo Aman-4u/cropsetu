@@ -57,9 +57,18 @@ window.alert = function(message) {
 
 function loadStored(key, fallback) {
 
+    // System keys jo user-specific nahi honi chahiye
+    const globalKeys = [
+        "cropSetuUsers", "cropSetuLoggedIn", "cropSetuCurrentUser",
+        "cropSetuRememberPhone", "selectedLanguage", "userLat", "userLng",
+        "lastOrderNo", "farmerProfile"
+    ];
+
+    const storageKey = globalKeys.includes(key) ? key : getUserKey(key);
+
     try {
 
-        const raw = localStorage.getItem(key);
+        const raw = localStorage.getItem(storageKey);
 
         if (!raw) {
             return fallback;
@@ -77,7 +86,7 @@ function loadStored(key, fallback) {
     } catch (error) {
 
         console.warn("Kharab data mila, reset kar diya:", key);
-        localStorage.removeItem(key);
+        localStorage.removeItem(storageKey);
 
         return fallback;
     }
@@ -537,7 +546,7 @@ listCropButton.addEventListener("click", function () {
     });
 
     localStorage.setItem(
-        "listedCrops",
+        getUserKey("listedCrops"),
         JSON.stringify(listedCropData)
     );
 
@@ -601,9 +610,73 @@ function renderBuyers() {
                 <p>📍 ${dist} away</p>
                 <p>🌾 Buying: ${buyer.buying}</p>
                 <p>📞 ${buyer.phone}</p>
-                <button onclick="window.location.href='tel:${buyer.phone}'">📞 Contact Buyer</button>
+              <button onclick="showContactPopup('${buyer.name}', '${buyer.phone}')">📞 Contact Buyer</button>
             </div>
         `;
+    });
+}
+function showContactPopup(name, phone) {
+
+    const overlay = document.createElement("div");
+    overlay.style.cssText = `
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+
+    overlay.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 16px;
+            padding: 28px 24px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        ">
+            <div style="font-size: 40px; margin-bottom: 10px;">📞</div>
+            <h3 style="color: #247a45; margin: 0 0 6px;">${name}</h3>
+            <p style="color: #555; font-size: 20px; font-weight: bold; margin: 0 0 20px;">${phone}</p>
+
+            <button onclick="window.location.href='tel:${phone}'" style="
+                width: 100%;
+                padding: 13px;
+                background: #247a45;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-bottom: 10px;
+            ">📞 Call the Buyer</button>
+
+            <button id="cancelContactBtn" style="
+                width: 100%;
+                padding: 13px;
+                background: #f1f1f1;
+                color: #333;
+                border: none;
+                border-radius: 10px;
+                font-size: 15px;
+                cursor: pointer;
+            ">Cancel</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector("#cancelContactBtn").addEventListener("click", function() {
+        document.body.removeChild(overlay);
+    });
+
+    overlay.addEventListener("click", function(e) {
+        if (e.target === overlay) {
+            document.body.removeChild(overlay);
+        }
     });
 }
 
@@ -1055,7 +1128,7 @@ function deleteLand(index) {
         savedLandData.splice(index, 1);
 
         localStorage.setItem(
-            "savedLands",
+            getUserKey("savedLands"),
             JSON.stringify(savedLandData)
         );
 
@@ -1696,15 +1769,11 @@ if (matchingBuyers.length > 0) {
 
 
                 <button
-                    class="contact-buyer-button"
-                    onclick="
-                        window.location.href='tel:${buyer.phone}'
-                    "
-                >
-
-                    📞 Contact Buyer
-
-                </button>
+    class="contact-buyer-button"
+    onclick="showContactNotification('${buyer.name}', '${buyer.phone}')"
+>
+    📞 Contact Buyer
+</button>
 
             </div>
         `;
@@ -1774,7 +1843,7 @@ function getCurrentAccount() {
 
         const data = JSON.parse(raw);
 
-        if (data && data.email) {
+        if (data && (data.phone || data.email)) {
             return data;
         }
 
@@ -1785,6 +1854,11 @@ function getCurrentAccount() {
     }
 }
 
+function getUserKey(key) {
+    const account = getCurrentAccount();
+    const id = account ? (account.phone || account.email) : "guest";
+    return key + "__" + id;
+}    
 
 /* ---------------------------------------------------------
    HAR ACCOUNT KA APNA PROFILE
@@ -1801,7 +1875,8 @@ function getProfileKey() {
         return "farmerProfile";
     }
 
-    return "farmerProfile__" + account.email;
+    // Phone se key banao (email ki jagah)
+    return "farmerProfile__" + (account.phone || account.email);
 }
 
 
@@ -2507,6 +2582,46 @@ updateProfileButtonName();
 
 // ================= NOTIFICATIONS =================
 
+function showContactNotification(name, phone) {
+
+    const notificationSection =
+        document.getElementById("notificationSection");
+
+    const notificationContainer =
+        document.getElementById("notificationContainer");
+
+    notificationSection.style.display = "block";
+
+    notificationContainer.innerHTML = `
+        <div class="notification-card">
+
+            <div class="notification-icon">
+                📞
+            </div>
+
+            <div class="notification-content">
+
+                <h3>Contact Buyer</h3>
+
+                <p>
+                    ${name} ka contact number:
+                    <strong>${phone}</strong>
+                </p>
+
+                <button
+                    class="contact-buyer-notification-button"
+                    onclick="window.location.href='tel:${phone}'"
+                >
+                    📞 Call Buyer
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
 const notificationButton =
     document.getElementById("notificationButton");
 
@@ -2518,7 +2633,6 @@ const notificationContainer =
 
 const clearNotificationsButton =
     document.getElementById("clearNotificationsButton");
-
 
 let notifications = loadStored("notifications", [
         {
@@ -2579,6 +2693,8 @@ function showNotifications() {
 }
 
 
+
+
 // Open Notifications
 notificationButton.addEventListener("click", function() {
 
@@ -2611,7 +2727,7 @@ clearNotificationsButton.addEventListener("click", function() {
         notifications = [];
 
         localStorage.setItem(
-            "notifications",
+                  getUserKey("notifications"),
             JSON.stringify(notifications)
         );
 
@@ -2623,10 +2739,10 @@ clearNotificationsButton.addEventListener("click", function() {
 
 
 // Save default notifications
-if (!localStorage.getItem("notifications")) {
+if (!localStorage.getItem(getUserKey("notifications"))) {
 
     localStorage.setItem(
-        "notifications",
+                getUserKey("notifications"),
         JSON.stringify(notifications)
     );
 
@@ -2918,7 +3034,7 @@ function addSeedToCart(index) {
     });
 
     localStorage.setItem(
-        "seedCart",
+                 getUserKey("seedCart"),
         JSON.stringify(cart)
     );
 
@@ -2948,7 +3064,7 @@ function renderCart() {
     if (cart.length === 0) {
 
         cartContainer.innerHTML =
-            "<p>🛒 Cart empty hai.</p>";
+            "<p>🛒 cart is empty</p>";
 
         cartTotal.textContent = "";
 
@@ -3210,7 +3326,7 @@ function renderOrders() {
 
         orderHistoryContainer.innerHTML = `
             <div class="shop-card">
-                <p>📜 Abhi koi delivered order nahi hai.</p>
+                <p>📜There is no delivered order at the moment.</p>
             </div>
         `;
 
@@ -3277,7 +3393,7 @@ clearHistoryButton.addEventListener("click", function () {
 
 
     if (deliveredCount === 0) {
-        alert("History already khaali hai.");
+        alert("history is already clear.");
         return;
     }
 
@@ -3297,7 +3413,7 @@ clearHistoryButton.addEventListener("click", function () {
         });
 
         localStorage.setItem(
-            "seedOrders",
+              getUserKey("seedOrders"),
             JSON.stringify(orders)
         );
 
@@ -3337,7 +3453,7 @@ function advanceOrder(index) {
         orders[index].deliveredAt = getTodayText();
 
         alert(
-            "✅ Order delivered! Order History mein dekh sakte hain."
+            "✅ Order delivered!you can access it in Order History ."
         );
 
         // History khud khol do, warna order gayab lagega
@@ -3347,7 +3463,7 @@ function advanceOrder(index) {
 
 
     localStorage.setItem(
-        "seedOrders",
+                getUserKey("seedOrders"),
         JSON.stringify(orders)
     );
 
@@ -3413,7 +3529,7 @@ placeOrderButton.addEventListener("click", function() {
     orders.push(order);
 
     localStorage.setItem(
-        "seedOrders",
+               getUserKey("seedOrders"),
         JSON.stringify(orders)
     );
 
