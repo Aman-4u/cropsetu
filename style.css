@@ -4551,3 +4551,27 @@ footer {
 }
 
 
+/* ===== MOBILE PROFILE DRAWER FIX ===== */
+@media (max-width: 700px) {
+
+    #profileSection {
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100dvh;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        box-sizing: border-box;
+        padding-bottom: 30px;
+    }
+
+    #profileSection .profile-drawer-content {
+        min-height: auto;
+        padding-bottom: 30px;
+    }
+
+    #logoutProfileButton {
+        margin-bottom: 20px !important;
+    }
+}
