@@ -2027,13 +2027,19 @@ function showCreateProfile(existing) {
         isEditing ? existing.name : (account ? account.name : "");
 
     document.getElementById("farmerPhone").value =
-        isEditing ? existing.phone : "";
+        isEditing ? existing.phone : (account ? account.phone : "");
+
+    document.getElementById("farmerEmail").value =
+        isEditing ? (existing.email || "") : "";
 
     document.getElementById("farmerVillage").value =
         isEditing ? existing.village : "";
 
     document.getElementById("farmerCrops").value =
         isEditing ? existing.crops : "";
+
+    document.getElementById("farmerEmail").value =
+        isEditing ? (existing.email || "") : "";
 
 
     saveProfileButton.textContent =
@@ -2052,6 +2058,9 @@ saveProfileButton.addEventListener("click", function () {
 
     const phone =
         document.getElementById("farmerPhone").value.trim();
+
+    const email =
+        document.getElementById("farmerEmail").value.trim();
 
     const village =
         document.getElementById("farmerVillage").value.trim();
@@ -2083,9 +2092,9 @@ saveProfileButton.addEventListener("click", function () {
 
         name: name,
         phone: phone,
+        email: email,
         village: village,
-        crops: crops,
-        email: account ? account.email : ""
+        crops: crops
 
     };
 
@@ -2405,49 +2414,49 @@ function showChangePassword(profile) {
     const account = getCurrentAccount();
 
     if (!account) {
-        alert("Pehle login karo.");
+        alert("login in your account first.");
         return;
     }
 
 
     profileTitle.textContent = "Change Password";
-    profileSubtitle.textContent = "Apna naya password set karo";
+    profileSubtitle.textContent = "set your new password";
 
 
     profileDisplay.innerHTML = `
 
         <div class="profile-input-group">
 
-            <label>Purana Password</label>
+            <label>old Password</label>
 
             <input
                 type="password"
                 id="oldPasswordInput"
-                placeholder="Abhi wala password">
+                placeholder="current password">
 
         </div>
 
 
         <div class="profile-input-group">
 
-            <label>Naya Password</label>
+            <label>New Password</label>
 
             <input
                 type="password"
                 id="newPasswordInput"
-                placeholder="Kam se kam 8 letter">
+                placeholder="minimum 8 characters">
 
         </div>
 
 
         <div class="profile-input-group">
 
-            <label>Naya Password Dobara</label>
+            <label>Confirm New Password</label>
 
             <input
                 type="password"
                 id="confirmPasswordInput"
-                placeholder="Wahi password phir se">
+                placeholder="confirm new password">
 
         </div>
 
