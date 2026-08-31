@@ -52,12 +52,10 @@ window.alert = function(message) {
 
 /* =========================================================
    SAFE STORAGE READ
-   localStorage ka data kharab ho jaaye to poora app na mare
    ========================================================= */
 
 function loadStored(key, fallback) {
 
-    // System keys jo user-specific nahi honi chahiye
     const globalKeys = [
         "cropSetuUsers", "cropSetuLoggedIn", "cropSetuCurrentUser",
         "cropSetuRememberPhone", "selectedLanguage", "userLat", "userLng",
@@ -2038,10 +2036,6 @@ function showCreateProfile(existing) {
     document.getElementById("farmerCrops").value =
         isEditing ? existing.crops : "";
 
-    document.getElementById("farmerEmail").value =
-        isEditing ? (existing.email || "") : "";
-
-
     saveProfileButton.textContent =
         isEditing ? "💾 Save Changes" : "💾 Create Profile";
 }
@@ -2944,7 +2938,7 @@ const clearHistoryButton =
     document.getElementById("clearHistoryButton");
 
 
-// History khuli hai ya band
+
 let historyOpen = false;
 
 
@@ -2979,7 +2973,6 @@ const seeds = [
 let cart = loadStored("seedCart", []);
 
 let orders = loadStored("seedOrders", []);
-    // localStorage.removeItem("seedOrders");
 
     const orderStages = [
     "Order Placed",
@@ -3120,9 +3113,6 @@ function renderCart() {
 
 }
 
-/* ---------------------------------------------------------
-   Aaj ki date — "25 Aug 2026" jaisi
-   --------------------------------------------------------- */
 
 function getTodayText() {
 
@@ -3134,9 +3124,7 @@ function getTodayText() {
 }
 
 
-/* ---------------------------------------------------------
-   Order number kabhi repeat na ho
-   --------------------------------------------------------- */
+
 
 function getNextOrderNo() {
 
@@ -3151,10 +3139,7 @@ function getNextOrderNo() {
 }
 
 
-/* ---------------------------------------------------------
-   Ek order ka card banao
-   isHistory = true  →  delivered wala card
-   --------------------------------------------------------- */
+
 
 function buildOrderCard(order, realIndex, isHistory) {
 
@@ -3277,12 +3262,6 @@ function renderOrders() {
     ordersContainer.innerHTML = "";
     orderHistoryContainer.innerHTML = "";
 
-
-    /*
-       Orders ko do hisso mein baanto.
-       realIndex zaroori hai — advanceOrder isi index se
-       kaam karta hai, isliye filter ke baad bhi asli index chahiye
-    */
 
     const activeOrders = [];
     const deliveredOrders = [];
@@ -3416,7 +3395,7 @@ clearHistoryButton.addEventListener("click", function () {
 
     }, function () {
 
-        // Sirf delivered wale hatao, chalu orders safe rahein
+       
         orders = orders.filter(function (order) {
             return order.stage < orderStages.length - 1;
         });
@@ -3465,7 +3444,6 @@ function advanceOrder(index) {
             "✅ Order delivered!you can access it in Order History ."
         );
 
-        // History khud khol do, warna order gayab lagega
         openOrderHistory();
 
     }
@@ -3621,7 +3599,7 @@ function runConversion() {
         return;
     }
 
-    // Pehle kg mein badlo, phir target unit mein
+  
     const result = (value * from.kg) / to.kg;
 
     let shown;
@@ -3665,7 +3643,6 @@ converterButton.addEventListener("click", function () {
 closeConverterButton.addEventListener("click", closeConverter);
 
 
-// Background par click karne se band
 converterOverlay.addEventListener("click", function (event) {
 
     if (event.target === converterOverlay) {
@@ -3673,14 +3650,12 @@ converterOverlay.addEventListener("click", function (event) {
     }
 });
 
-
-// Kuch bhi badle to turant result update
 converterValue.addEventListener("input", runConversion);
 converterFrom.addEventListener("change", runConversion);
 converterTo.addEventListener("change", runConversion);
 
 
-// Ulta-pulta karne wala button
+
 converterSwapButton.addEventListener("click", function () {
 
     const temp = converterFrom.value;
@@ -3714,12 +3689,7 @@ if (logoutButton) {
 
         }, function () {
 
-            /*
-               Sirf login wali key hatate hain.
-               cropSetuUsers (saare account) aur farm ka data
-               (profile, lands, orders) chhedte nahi -- warna
-               wapas login karne par sab khaali mil jaayega.
-            */
+          
             localStorage.removeItem("cropSetuLoggedIn");
             localStorage.removeItem("cropSetuCurrentUser");
 
