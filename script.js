@@ -2468,14 +2468,13 @@ function showChangePassword(profile) {
             id="cancelPasswordButton"
             class="profile-secondary-button">
 
-            ← Wapas
+            ← Back
 
         </button>
 
     `;
 
-
-    /* ----- Wapas ----- */
+    /* ----- back ----- */
 
     const cancelButton =
         document.getElementById("cancelPasswordButton");
@@ -2848,11 +2847,11 @@ prices[prices.length - 1] = currentMarketPrice;
     trackingLowestPrice.textContent = "₹" + lowest;
 
     if (current > prices[0]) {
-        priceTrend.textContent = "📈 Bhaav badh raha hai";
+        priceTrend.textContent = "📈 market price is increasing";
     } else if (current < prices[0]) {
-        priceTrend.textContent = "📉 Bhaav kam ho raha hai";
+        priceTrend.textContent = "📉 market price is decreasing";
     } else {
-        priceTrend.textContent = "🟡 Bhaav same hai";
+        priceTrend.textContent = "🟡 market price is same as yesterday";
     }
 
     const min = Math.min(...prices);
@@ -3714,4 +3713,59 @@ if (mobileMenuButton && sidebar) {
         sidebar.classList.toggle("mobile-sidebar-open");
     });
 
+}
+
+/* =========================================================
+   AI CHATBOT (Gemini API) - frontend only for now
+   ⚠️ TODO: move GEMINI_KEY to backend before going live
+   ========================================================= */
+const GEMINI_KEY = "AQ.Ab8RN6L-Hh0XYWqFYRk2oEoG6kAZsWPVMVqrRP19RM-j2YMP6w";
+
+function toggleChat(){
+    const box = document.getElementById("chatBox");
+    box.style.display = box.style.display === "flex" ? "none" : "flex";
+}
+
+function addMsg(text, sender){
+    const div = document.createElement("div");
+    div.className = sender;
+    div.textContent = text;
+    const box = document.getElementById("chatMessages");
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+}
+
+async function sendMsg(){
+    const input = document.getElementById("chatInput");
+    const msg = input.value.trim();
+    if(!msg) return;
+    addMsg(msg, "user");
+    input.value = "";
+    addMsg("Typing...", "bot");
+
+    try{
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-goog-api-key": GEMINI_KEY
+            },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: `Tum CropSetu app ke helpful farming assistant ho. Kisano ki madad karo crop price, mandi, aur app ke features samajhne mein. Sawaal: ${msg}` }] }]
+            })
+        });
+        const data = await res.json();
+        document.getElementById("chatMessages").lastChild.remove();
+        if(data.error){
+            console.error("Gemini API error:", data.error);
+            addMsg("API error: " + data.error.message, "bot");
+            return;
+        }
+        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, samajh nahi paya.";
+        addMsg(reply, "bot");
+    }catch(e){
+        document.getElementById("chatMessages").lastChild.remove();
+        console.error("Chat fetch failed:", e);
+        addMsg("Error aa gaya, thodi der baad try karo.", "bot");
+    }
 }

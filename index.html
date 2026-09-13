@@ -234,7 +234,7 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <!-- Price Tracking -->
 <section id="priceTrackingSection" class="analytics-section" style="display:none;">
 
-    <h2>📈 Price ka haal</h2>
+    <h2>📈 price graph</h2>
 
     <div class="price-tracking-card">
 
@@ -294,7 +294,7 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </div>
 
         <p id="priceTrend">
-            📈 Bhaav badh raha hai
+            📈 market price increasing 
         </p>
 
     </div>
@@ -924,6 +924,17 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <footer>
         <p>© 2026 CropSetu</p>
     </footer>
+
+<!-- AI Chatbot -->
+<button id="chatBtn" onclick="toggleChat()">💬</button>
+<div id="chatBox">
+  <div id="chatHeader">CropSetu Assistant <span onclick="toggleChat()" style="cursor:pointer">✖</span></div>
+  <div id="chatMessages"></div>
+  <div id="chatInputBar">
+    <input id="chatInput" placeholder="Apna sawaal poochho..." onkeypress="if(event.key==='Enter')sendMsg()">
+    <button onclick="sendMsg()">➤</button>
+  </div>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="script.js"></script>

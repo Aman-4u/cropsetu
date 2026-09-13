@@ -4575,3 +4575,17 @@ footer {
         margin-bottom: 20px !important;
     }
 }
+
+
+/* =========================================================
+   AI CHATBOT WIDGET
+   ========================================================= */
+#chatBtn{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:#1e7e34;color:#fff;font-size:24px;border:none;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.3);z-index:9999;}
+#chatBox{position:fixed;bottom:90px;right:20px;width:320px;height:420px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden;z-index:9999;}
+#chatHeader{background:#1e7e34;color:#fff;padding:12px;font-weight:bold;display:flex;justify-content:space-between;}
+#chatMessages{flex:1;padding:10px;overflow-y:auto;font-size:14px;}
+#chatMessages .user{text-align:right;margin:6px 0;color:#1e7e34;}
+#chatMessages .bot{text-align:left;margin:6px 0;color:#333;}
+#chatInputBar{display:flex;border-top:1px solid #ddd;}
+#chatInput{flex:1;border:none;padding:10px;outline:none;}
+#chatInputBar button{background:#1e7e34;color:#fff;border:none;padding:0 14px;cursor:pointer;}
