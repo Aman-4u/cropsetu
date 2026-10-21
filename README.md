@@ -106,7 +106,7 @@ npm run dev
 - [x] Create the location selector and search interface.
 - [x] Add quick-access tiles and the mandi prices section.
 - [x] Create the bottom navigation layout.
-- [ ] Finalize the frontend implementation.
+- [x] Finalize the frontend implementation.
 - [ ] Develop the backend and database.
 - [ ] Integrate real market data.
 - [ ] Implement farmer–buyer interactions.
